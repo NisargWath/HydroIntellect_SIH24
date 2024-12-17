@@ -1,0 +1,546 @@
+ /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+     
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background-color: #22223b; 
+            padding: 20px;
+            user-select: none;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        
+        [type=radio] {
+            display: none;
+        }
+        
+        #slider {
+            height: 400px;
+            position: relative;
+            perspective: 500px;
+            transform-style: preserve-3d;
+            transform-origin: 0% 50%;
+        }
+        
+        label img {
+            width: 250px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        
+        #slider label {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: auto;
+            width: 250px;
+            height: 300px;
+            border-radius: 4px;
+            position: absolute;
+            left: 0;
+            right: 0;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+        
+        #foto1:checked ~ #slide4,
+        #foto2:checked ~ #slide5,
+        #foto3:checked ~ #slide1,
+        #foto4:checked ~ #slide2,
+        #foto5:checked ~ #slide3 {
+            box-shadow: 0 1px 4px 0 rgba(0,0,0,.37);
+            transform: translate3d(-30%,0,-200px);
+            opacity: 0.6;
+            z-index: -2;
+            position: absolute;
+            top: 0;
+            left: -60%;
+        
+        }
+        
+        #foto1:checked ~ #slide5,
+        #foto2:checked ~ #slide1,
+        #foto3:checked ~ #slide2,
+        #foto4:checked ~ #slide3,
+        #foto5:checked ~ #slide4 {
+            box-shadow: 0 6px 10px 0 rgba(0, 0, 0, .3);
+            transform: translate3d(-15%, 0, -100px);
+            opacity: 0.8;
+            z-index: -1;
+            position: absolute;
+            top: 0;
+            left: -30%;
+        }
+        
+        #foto1:checked ~ #slide1,
+        #foto2:checked ~ #slide2,
+        #foto3:checked ~ #slide3, 
+        #foto4:checked ~ #slide4,
+        #foto5:checked ~ #slide5 {
+            box-shadow: 0 13px 25px 0 rgba(0, 0, 0, .3);
+            transform: translate3d(0, 0, 0);
+        }
+        
+        #foto1:checked ~ #slide2,
+        #foto2:checked ~ #slide3,
+        #foto3:checked ~ #slide4,
+        #foto4:checked ~ #slide5,
+        #foto5:checked ~ #slide1 {
+            box-shadow: 0 6px 10px 0 rgba(0, 0, 0, .3);
+            transform: translate3d(15%, 0, -100px);
+            opacity: 0.8;
+            z-index: -2;
+            position: absolute;
+            top: 0;
+            left: 30%;
+        }
+        
+        #foto1:checked ~ #slide3,
+        #foto2:checked ~ #slide4,
+        #foto3:checked ~ #slide5,
+        #foto4:checked ~ #slide1,
+        #foto5:checked ~ #slide2 {
+            box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .3);
+            transform: translate3d(30%, 0, -200px);
+            opacity: 0.6;
+            z-index: -2;
+            position: absolute;
+            top: 0;
+            left: 60%;
+        }
+          
+        
+    
+
+        
+
+/* Switch Styles */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 25px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 25px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 19px;
+    width: 19px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #FFA500; /* Orange */
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-bar input {
+            padding: 5px;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .search-bar button {
+            background-color: #FFA500;
+            border: none;
+            padding: 5px 10px;
+            margin-left: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+            color: white;
+        }
+
+        .theme-button {
+            background-color: #3A6D8C;
+            border: none;
+            padding: 5px 10px;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .theme-button:hover {
+            background-color: #6A9AB0;
+        }
+
+        /* Introduction Section */
+        .intro {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    padding: 20px;
+    /* background: #f7f7e1; */
+    color: #001F3F;
+    font-family: 'Lora';
+    height: 350px;
+    width: 100%;
+    overflow: hidden; /* Prevents overflow during animations */
+}
+
+.video-background{
+    position: absolute;
+    /* right:0; */
+    top: 0;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    height:600%;
+    overflow: hidden;
+}
+.video-background video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the video */
+    width: 100%; /* Scale video to fill width */
+    height: 100%; /* Scale video to fill height */
+    object-fit: cover; /* Ensure the video fills the container without distortion */ /* Add transparency for better readability */
+}
+
+.intro img {
+    position: relative;
+    align-self: flex-end;
+    max-width: 50%;
+    border-radius: 50%; /* Circular shape */
+    animation: float 3s infinite ease-in-out; /* Floating effect added */
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0); /* Neutral position */
+    }
+    50% {
+        transform: translateY(-15px); /* Float upwards slightly */
+    }
+}
+
+.intro h1, .intro p {
+    position: relative;
+    z-index: 1; /* Ensures text is above the image if they overlap */
+    animation: slideInFromLeft 1s ease-in-out 0.5s forwards; /* Text animation with delay */
+    opacity: 0; /* Start invisible */
+}
+.intro p {
+    font-size: 36px;
+}
+
+.intro h1 {
+    font-size: 50px;
+}
+
+@keyframes slideInFromLeft {
+    from {
+        transform: translateX(-100%); /* Start off-screen on the left */
+        opacity: 0; /* Invisible */
+    }
+    to {
+        transform: translateX(0); /* End at normal position */
+        opacity: 1; /* Fully visible */
+    }
+}
+
+#image {
+    position: absolute;
+    width: 350px; /* Set container dimensions */
+    height: 350px;
+    border-radius: 50%; /* Makes the container circular */
+    overflow: hidden;
+    align-self: flex-end;
+    bottom: 0; /* Align to the bottom */
+    right: 0; /* Positioned at the bottom-right */
+    animation: float 3s infinite ease-in-out; /* Floating effect applied */
+}
+
+
+        /* Dashboard Section */
+        .dashboard {
+            position: relative;
+            padding: 20px;
+            width: 100vw;
+            color: white;
+
+            text-align: center;
+        }
+
+        .dashboard h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        .dashboard iframe{
+            width:100%;
+            height:600px;
+        }
+        .dashboard video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }.video-section {
+      position: relative;
+      height: 100vh; /* Full viewport height */
+      overflow: hidden; /* Ensures content doesn't overflow */
+    }
+
+    /* Video styling */
+    #video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%); /* Centers the video */
+      min-width: 100%; /* Ensures video covers the width */
+      min-height: 100%; /* Ensures video covers the height */
+      z-index: -1; /* Sends video to the background */
+    }
+
+    /* Text or content overlay */
+    #video {
+      position: relative;
+      z-index: 1; /* Brings content above the video */
+      color: white; /* Example content color */
+      text-align: center;
+      font-size: 2rem;
+      padding: 20px;
+    }
+
+/* Map Section */
+.map-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: #ffffff;
+    color: rgb(0, 0, 0);
+    position: relative; /* For animations to be relative to the section */
+    overflow: hidden; /* Ensures no overflow during animation */
+}
+
+.map-section img {
+    max-width: 50%;
+    border-radius: 10px;
+    animation: slideInFromRight 1s ease-in-out forwards; /* Animation for image */
+    opacity: 0; /* Start invisible */
+}
+
+.map-section .description {
+    max-width: 40%;
+    animation: slideInFromRight 1s ease-in-out 0.5s forwards; /* Delay for sequential animation */
+    opacity: 0; /* Start invisible */
+}
+
+.map-section button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background: #FFA500;
+    border: none;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Slide-in animations */
+@keyframes slideInFromRight {
+    from {
+        transform: translateX(100%); /* Start from the right */
+        opacity: 0; /* Invisible */
+    }
+    to {
+        transform: translateX(0); /* End at normal position */
+        opacity: 1; /* Fully visible */
+    }
+}
+
+/* Background fade-in effect */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+        /* Services Section */
+        .services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            background: #fafdff;
+        }
+
+        .service-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            transition: transform 0.3s ease;
+        }
+
+        .service-card h3 {
+            color: #001F3F;
+        }
+
+        .service-card p {
+            color: #555;
+        }
+
+        .service-card button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #FFA500;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .service-card button:hover {
+            background: #d9971d;
+        }
+
+        /* About Section */
+        .about {
+            padding: 20px;
+            background: #3A6D8C;
+            color: white;
+            text-align: center;
+        }
+        .about h2 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+        /* Footer */
+        footer {
+            background: #001F3F;
+            color: white;
+            text-align: center;
+            /* padding: 20px; */
+        }
+
+        footer a {
+            color: #FFA500;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Styling for Contact Section */
+/* Styling for Contact Section */
+.contact {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.contact h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Flexbox Layout for Contact Information */
+.contact-info {
+    display: flex;
+    flex-wrap: wrap; /* Allows items to wrap to the next line if the space is not enough */
+    justify-content: space-between; /* Creates space between the items */
+    gap: 20px; /* Adds space between elements */
+}
+
+.contact-item {
+    flex: 1;
+    min-width: 250px; /* Ensures items don't get too small */
+    margin-bottom: 20px;
+}
+
+.contact-item h3 {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+}
+
+.contact-item p {
+    font-size: 1em;
+}
+
+.contact a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.contact a:hover {
+    text-decoration: underline;
+}
+
+/* Optional: for responsive layout */
+@media (max-width: 768px) {
+    .contact {
+        padding: 15px;
+    }
+
+    .contact h2 {
+        font-size: 1.5em;
+    }
+    
+    .contact-item {
+        min-width: 100%; /* Stacks the items vertically on smaller screens */
+    }
+}
+
