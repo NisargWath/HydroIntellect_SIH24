@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Dam Map</title>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB655H2fIB8b-mcPcc_6Phfl6q7d67zjxA&callback=initMap" defer></script>
+  <style>
+   body {
+  margin: 0;
+  display: flex;
+}
+
+#map {
+  flex: 3;
+  height: 100vh;
+}
+
+#info-panel {
+  flex: 1;
+  padding: 20px;
+  background-color: #d3fbfb; /* Light Orange */
+  border: 3px solid #7ed2ee;
+}
+
+h2 {
+  margin-top: 5px;
+  color: #333; /* Dark Blue-Black */
+}
+
+p {
+  margin: 5px 10px 5pz 5px;
+  color: #444; /* Darker Gray */
+}
+
+p strong {
+  color: #333; /* Dark Blue-Black */
+}
+
+p span {
+  color: #007bff; /* Blue */
+}
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <div id="info-panel">
+    <center><h2>Dam Information</h2></center>
+    <p><strong>Name:</strong> <span id="dam-name">N/A</span></p>
+    <p><strong>Latitude:</strong> <span id="dam-lat">N/A</span></p>
+    <p><strong>Longitude:</strong> <span id="dam-lng">N/A</span></p>
+    <p><strong>Nearest City:</strong> <span id="nearest-city">N/A</span></p>
+    <p><strong>Dam Type:</strong> <span id="dam-type">N/A</span></p>
+    <p><strong>River Basin:</strong> <span id="river-basin">N/A</span></p>
+    <!-- <p><strong>Height Above Lowest Foundation Level:</strong> <span id="dam-height">N/A</span></p> -->
+    <p><strong>Dam Length:</strong> <span id="dam-length">N/A</span></p>
+    <!-- <p><strong>Gross Storage Capacity:</strong> <span id="dam-capacity">N/A</span></p>
+  </div> -->
+
+  <script>
+    let map;
+    const dams = [
+      {
+        name: "Khadakwasla Dam",
+        lat: 18.4565,
+        lng: 73.7678,
+        nearestCity: "Pune",
+        type: "Earthfill",
+        riverBasin: "Mutha",
+        height: "31.8 m",
+        length: "1,640 m",
+        capacity: "1,970 million cubic feet"
+      },
+      {
+        name: "Panshet Dam",
+        lat: 18.3553,
+        lng: 73.7393,
+        nearestCity: "Pune",
+        type: "Earthfill",
+        riverBasin: "Ambi",
+        height: "63.56 m",
+        length: "1,039 m",
+        capacity: "10,600 million cubic feet"
+      },{
+  name: "Dondapadu tank",
+  lat: 16.5433,
+  lng: 80.4525,
+  yearOfConstruction: 1910,
+  river: "Krishna",
+  nearestCity: "Vinukonda",
+  category: "II",
+  type: "Earthfill_Embankment",
+  height: 10.3,
+  length: 720,
+  liveStorageCapacity: 0,
+  grossStorageCapacity: 7263000,
+  deadStorageCapacity: 2640000,
+  usefulStorageCapacity: 6537000,
+  irrigationPotential: "I",
+  commandArea: 210
+},{
+    name: "Upper Pennar",
+    lat: 14.3511,
+    lng: 77.3517,
+    yearOfConstruction: 1959,
+    river: "Pennar",
+    riverBasin: "Pennar",
+    nearestCity: "Dharmavaram",
+    type: "Earthfill_Embankment",
+    height: 16.74,
+    length: 3505,
+  },
+  {
+    "name": "Lower Sagileru Project",
+    "lat": 14.9536,
+    "lng": 78.9483,
+    "yearOfConstruction": 1959,
+    "river": "Pennar",
+    "riverBasin": "Sagileru",
+    "nearestCity": "Badvel",
+    "category": "II",
+    "type": "Other",
+    "height": 22.91,
+    "length": 1905,
+  },
+  {
+    "name": "Rallapadu Project",
+    "latitude": 15.0544,
+    "longitude": 79.7183,
+    "yearOfConstruction": 1958,
+    "river": "Manneru",
+    "riverBasin": "East flowing rivers between Krishna and Pennar",
+    "nearestCity": "Rallapadu",
+    "category": "III",
+    "type": "Earthfill_Embankment",
+    "height": 13.85,
+    "length": 2951,
+  },{
+  "name": "Siddlagandi Project, Kotakadapalle (V)",
+  "lat": 13.8317,
+  "lng": 79.14,
+  "yearOfConstruction": 1959,
+  "river": "Pennar",
+  "riverBasin": "Talakona",
+  "nearestCity": "Vayalpad",
+  "category": "III",
+  "type": "Earthfill_Embankment",
+  "height": 12,
+},{
+  "name": "Bhairavanitippa",
+  "lat": 14.5389,
+  "lng": 76.8378,
+  "yearOfConstruction": 1961,
+  "river": "Krishna",
+  "riverBasin": "pedda hagari",
+  "nearestCity": "Rayadurg",
+  "category": "II",
+  "type": "Earthfill_Embankment",
+  "height": 20,
+  "length": 2235,
+},
+  {
+    "name": "Gandipalem Project",
+    "lat": 14.9903,
+    "lng": 79.2975,
+    "yearOfConstruction": 1981,
+    "river": "Pennar",
+    "riverBasin": "Pillaperu",
+    "nearestCity": "Udayagiri",
+    "category": "II",
+    "type": "Other",
+    "height": 21,
+    "length": 388,
+  },
+  {
+    "name": "Jalleru Reservoir",
+    "lat": 17.29,
+    "lng": 81.3458,
+    "yearOfConstruction": 1992,
+    "river": "Godavari",
+    "riverBasin": "Jalleru",
+    "nearestCity": "Polavaram",
+    "category": "III",
+    "type": "Other",
+    "height": 31.42,
+    "length": 1790,
+    "liveStorageCapacity": 1069000,
+    "grossStorageCapacity": 15317000,
+    "deadStorageCapacity": 1641000,
+    "usefulStorageCapacity": 11339000,
+    "irrigationPotential": "I",
+    "commandArea": 348
+  },
+  {
+    "name": "Thammileru",
+    "lat": 17.0125,
+    "lng": 80.9597,
+    "yearOfConstruction": 1980,
+    "river": "East flowing rivers between Godavari and Krishna",
+    "riverBasin": "Thammileru",
+    "nearestCity": "Thiruvuru",
+    "category": "III",
+    "type": "Other",
+    "height": 23.25,
+    "length": 6400,
+    "liveStorageCapacity": 2549000,
+    "grossStorageCapacity": 84939000,
+    "deadStorageCapacity": 13755000,
+    "usefulStorageCapacity": 76444000,
+    "irrigationPotential": "I",
+    "commandArea": 736
+  },
+  {
+    "name": "Varikunta Tank",
+    "lat": 15.0461,
+    "lng": 78.8586,
+    "yearOfConstruction": 1997,
+    "river": "Pennar",
+    "riverBasin": "Local Stream",
+    "nearestCity": "Badvel",
+    "category": "II",
+    "type": "Earthfill_Embankment",
+    "height": 15.1,
+    "length": 1156,
+    "liveStorageCapacity": "NA",
+    "grossStorageCapacity": 1900000,
+    "deadStorageCapacity": 1060000,
+    "usefulStorageCapacity": 1900000,
+    "irrigationPotential": "I",
+    "commandArea": 810
+  },
+  {
+    "name": "NARKOLA TANK",
+    "lat": 22.97,
+    "lng": 83.1272,
+    "yearOfConstruction": 1994,
+    "river": "Ganga",
+    "riverBasin": "Local",
+    "nearestCity": "Lakhanpur",
+    "category": "II",
+    "type": "Earthfill_Embankment",
+    "height": 17.75,
+    "length": 457,
+    "liveStorageCapacity": 188000,
+    "grossStorageCapacity": 2603000,
+    "deadStorageCapacity": 465000,
+    "usefulStorageCapacity": 2344000,
+    "irrigationPotential": "I",
+    "commandArea": 93
+  },
+  {
+    "name": "DEOKATTA",
+    "lat": 21.2161,
+    "lng": 80.7686,
+    "yearOfConstruction": 1996,
+    "river": "Mahanadi",
+    "riverBasin": "Local nalla",
+    "nearestCity": "Dongaragarh",
+    "category": "II",
+    "type": "Earthfill_Embankment",
+    "height": 18.42,
+    "length": 548,
+    "liveStorageCapacity": 30280,
+    "grossStorageCapacity": 3170000,
+    "deadStorageCapacity": 559000,
+    "usefulStorageCapacity": 3030000,
+    "irrigationPotential": "I",
+    "commandArea": 144
+  } ,
+  {
+    "name": "Jetholi",
+    "lat": 23.0792,
+    "lng": 73.3436,
+    "yearOfConstruction": 1970,
+    "river": "Mahi",
+    "riverBasin": "Vahela",
+    "nearestCity": "Vadasinor",
+    "category": "III",
+    "type": "Earthfill_Embankment",
+    "height": 17.07,
+    "length": 1951,
+    "liveStorageCapacity": 0,
+    "grossStorageCapacity": 47835000,
+    "deadStorageCapacity": 2950000,
+    "usefulStorageCapacity": null,
+    "irrigationPotential": "I",
+    "commandArea": null
+  },
+  {
+    "name": "Jamnagar Dam",
+    "lat": 22.4044,
+    "lng": 70.4036,
+    "yearOfConstruction": 1988,
+    "river": "West Flowing Rivers of Kutch and Saurashtra including Luni",
+    "riverBasin": "Und",
+    "nearestCity": "Jamnagar",
+    "category": "IV",
+    "type": "Other",
+    "height": 27,
+    "length": 6021,
+    "liveStorageCapacity": 2020000,
+    "grossStorageCapacity": 72500000,
+    "deadStorageCapacity": 17300000,
+    "usefulStorageCapacity": null,
+    "irrigationPotential": "I",
+    "commandArea": null
+  },
+  {
+    "name": "RAJLI",
+    "lat": 24.2733,
+    "lng": 81.1794,
+    "yearOfConstruction": 2003,
+    "river": "Ganga",
+    "riverBasin": "Rajali Nala",
+    "nearestCity": "Satna",
+    "category": "II",
+    "type": "Earthfill_Embankment",
+    "height": 10.38,
+    "length": 790,
+    "liveStorageCapacity": 102400,
+    "grossStorageCapacity": 1468000,
+    "deadStorageCapacity": null,
+    "usefulStorageCapacity": null,
+    "irrigationPotential": "I",
+    "commandArea": 144
+  },
+  {
+    "name": "SHIVLALDHANA",
+    "lat": 22.9689,
+    "lng": 79.9756,
+    "yearOfConstruction": 2003,
+    "river": "Narmada",
+    "riverBasin": "Local",
+    "nearestCity": "Sambalpur",
+    "category": "III",
+    "type": "Earthfill_Embankment",
+    "height": 16.55,
+    "length": 233,
+    "liveStorageCapacity": 0,
+    "grossStorageCapacity": 1280000,
+    "deadStorageCapacity": null,
+    "usefulStorageCapacity": null,
+    "irrigationPotential": "I",
+    "commandArea": null
+  },
+  {
+    "name": "DUDHANA",
+    "lat": 20.2103,
+    "lng": 78.3428,
+    "yearOfConstruction": 1977,
+    "river": "Godavari",
+    "riverBasin": "Local Nalla",
+    "nearestCity": "Yavatmal",
+    "category": "II",
+    "type": "Earthfill_Embankment",
+    "height": 15,
+    "length": 310,
+    "liveStorageCapacity": 105000,
+    "grossStorageCapacity": 1044000,
+    "deadStorageCapacity": 254000,
+    "usefulStorageCapacity": null,
+    "irrigationPotential": "I",
+    "commandArea": null
+  } ,
+  {
+    "name": "Rajasthan Dam 1",
+    "lat": 24.9636,
+    "lng": 72.4383,
+    "yearOfConstruction": 2008,
+    "river": "West Flowing Rivers of Kutch and Saurashtra including Luni",
+    "riverBasin": "Bandi",
+    "nearestCity": "Bhinmal",
+    "category": "III",
+    "type": "Earthfill_Embankment",
+    "height": 19.11,
+    "length": 2704,
+    "liveStorageCapacity": 1176000,
+    "grossStorageCapacity": 28690000,
+    "deadStorageCapacity": 6195200,
+    "usefulStorageCapacity": 25980000,
+    "irrigationPotential": "I",
+    "commandArea": null
+  },
+  {
+    "name": "Rajasthan Dam 2",
+    "lat": 26.0483,
+    "lng": 75.1814,
+    "yearOfConstruction": 1981,
+    "river": "Ganga",
+    "riverBasin": "Dai",
+    "nearestCity": "sarwar",
+    "category": "II",
+    "type": "Earthfill_Embankment",
+    "height": 20.15,
+    "length": 4325,
+    "liveStorageCapacity": 0,
+    "grossStorageCapacity": 11490000,
+    "deadStorageCapacity": 2640000,
+    "usefulStorageCapacity": 10650000,
+    "irrigationPotential": "I",
+    "commandArea": null
+  }// Add more dam details here
+    ];
+
+    function initMap() {
+      map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: 20.5937, lng: 78.9629 }, // Center on India
+        zoom: 5,
+      });
+
+      dams.forEach(dam => {
+        const marker = new google.maps.Marker({
+          position: { lat: dam.lat, lng: dam.lng },
+          map: map,
+          title: dam.name
+        });
+
+        // Add hover event listener for info display
+        marker.addListener("mouseover", () => displayDamInfo(dam));
+
+        // Clear info on mouseout (optional)
+        marker.addListener("mouseout", () => clearDamInfo());
+      });
+    }
+
+    function displayDamInfo(dam) {
+      document.getElementById("dam-name").textContent = dam.name;
+      document.getElementById("dam-lat").textContent = dam.lat;
+      document.getElementById("dam-lng").textContent = dam.lng;
+      document.getElementById("nearest-city").textContent = dam.nearestCity;
+      document.getElementById("dam-type").textContent = dam
+            document.getElementById("dam-type").textContent = dam.type;
+            document.getElementById("river-basin").textContent = dam.riverBasin;
+            document.getElementById("dam-height").textContent = dam.height;
+            document.getElementById("dam-length").textContent = dam.length;
+            document.getElementById("dam-capacity").textContent = dam.capacity;
+        }
+    </script>
+</body>
+</html>

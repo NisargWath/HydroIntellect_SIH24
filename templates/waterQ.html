@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Quality Map</title>
+
+    <style>
+        body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #e8f4fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 80%;
+    max-width: 600px;
+    text-align: center;
+}
+
+h1 {
+    color: #0077b6;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#info-panel {
+    margin-top: 20px;
+    background-color: #f1faff;
+    padding: 15px;
+    border: 1px solid #0077b6;
+    border-radius: 5px;
+}
+
+#info-panel h2 {
+    color: #005f73;
+    margin-bottom: 10px;
+}
+
+#info-content {
+    font-size: 14px;
+    color: #333;
+}
+    </style>
+    <!-- <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB655H2fIB8b-mcPcc_6Phfl6q7d67zjxA&callback=initMap"></script> -->
+</head>
+<body>
+
+ 
+    <div class="container">
+        <!-- Form Panel -->
+        <div class="form-panel">
+            <h1>Water Quality Map</h1>
+
+            <label for="state">Select State:</label>
+            <select id="state">
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+<option value="Arunachal Pradesh">Arunachal Pradesh</option>
+<option value="Assam">Assam</option>
+<option value="Bihar">Bihar</option>
+<option value="Chhattisgarh">Chhattisgarh</option>
+<option value="Goa">Goa</option>
+<option value="Gujarat">Gujarat</option>
+<option value="Haryana">Haryana</option>
+<option value="Himachal Pradesh">Himachal Pradesh</option>
+<option value="Jharkhand">Jharkhand</option>
+<option value="Karnataka">Karnataka</option>
+<option value="Kerala">Kerala</option>
+<option value="Madhya Pradesh">Madhya Pradesh</option>
+<option value="Maharashtra">Maharashtra</option> 
+<option value="Manipur">Manipur</option>
+<option value="Meghalaya">Meghalaya</option>
+<option value="Mizoram">Mizoram</option>
+<option value="Nagaland">Nagaland</option>
+<option value="Odisha">Odisha</option>
+<option value="Punjab">Punjab</option>
+<option value="Rajasthan">Rajasthan</option>
+<option value="Sikkim">Sikkim</option>
+<option value="Tamil Nadu">Tamil Nadu</option>
+<option value="Telangana">Telangana</option>
+<option value="Tripura">Tripura</option>
+<option value="Uttar Pradesh">Uttar Pradesh</option>
+<option value="Uttarakhand">Uttarakhand</option>
+<option value="West Bengal">West Bengal</option>
+<option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+<option value="Chandigarh">Chandigarh</option>
+<option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
+<option value="Delhi">Delhi</option>
+<option value="Jammu and Kashmir">Jammu and Kashmir</option>
+<option value="Ladakh">Ladakh</option>
+<option value="Lakshadweep">Lakshadweep</option>
+<option value="Puducherry">Puducherry</option>
+            </select>
+
+            <label for="location">Select Location:</label>
+            <select id="location">
+                <option value="RAIANAKERE">AIANAKERE</option>
+                <option value="AGARAM LAKE">AGARAM LAKE</option>
+                <option value="YENNEHOLE LAKE">YENNEHOLE LAKE</option>
+                <option value="ALLASANDRA TANK">ALLASANDRA TANK</option>
+                <option value="AKRAVATHIR RIVER BEFORE CONFLUENCE AT SANGAM">AKRAVATHIR RIVER BEFORE CONFLUENCE AT SANGAM</option>
+                <option value="ALUR KERE">ALUR KERE</option>
+                <option value="ABBIGERE LAKE">ABBIGERE LAKE</option>
+                <option value="YENNEHOLE LAKE">YENNEHOLE LAKE</option>
+                <option value="YELLAMALLAPPA TANK">YELLAMALLAPPA TANK</option>
+                <option value="YEDIYUR LAKE">YEDIYUR LAKE</option>
+                <option value="WHITEFIELD KERE">WHITEFIELD KERE</option>
+                <option value="YAGACHI RIVER NEARPUMPING STATION. HASSAN CITY">YAGACHI RIVER NEARPUMPING STATION. HASSAN CITY</option>
+            </select>
+
+            <label for="category">Select Category:</label>
+            <select id="category">
+                <option value="River">River</option>
+                <option value="Drain">Drains</option>
+                <option value="Lake">Lakes</option>
+                <option value="Pond">Pond</option>
+                <option value="Tank">Tank</option>
+                <option value="canals">Tanks</option>
+                <option value="Coastal">Coastal</option>
+                <option value="STP">STP</option>
+                <option value="Marine">Marine</option>
+                <option value="WetLand">WetLand</option>
+                <option value="Creek">Creek</option>
+                <option value="Sea Water">Sea Water</option>
+                <option value="Groundwater">Groundwater</option>
+                <option value="Medium And Minor Rivers">Medium And Minor Rivers</option>
+            </select>
+
+            <label for="year">Select Year:</label>
+            <select id="year">
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+                <option value="2028">2028</option>
+                <option value="2029">2029</option>
+                <option value="2030">2030</option>
+                <option value="2031">2031</option>
+                <option value="2032">2032</option>
+                <option value="2033">2033</option>
+                <option value="2034">2034</option>
+                <option value="2035">2035</option>
+                <option value="2036">2036</option>
+                <option value="2037">2037</option>
+                <option value="2038">2038</option>
+                <option value="2039">2039</option>
+                <option value="2040">2040</option>
+            </select>
+
+        </div>
+
+        <!-- Info Panel -->
+        <div id="info-panel">
+            <h2>Water Quality Information</h2>
+            <div id="info-content">Select a location to see the details here.</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        
+function updateDistricts() {
+    const stateSelect = document.getElementById("state");
+    const districtSelect = document.getElementById("district");
+    const selectedState = stateSelect.value;
+
+    districtSelect.innerHTML = '<option value="">--Select District--</option>';
+
+    if (selectedState && stateDistricts[selectedState]) {
+        stateDistricts[selectedState].forEach(district => {
+            const option = document.createElement("option");
+            option.value = district;
+            option.textContent = district;
+            districtSelect.appendChild(option);
+        });
+    }
+}
+
+
+    </script>
+</body>
+</html>
