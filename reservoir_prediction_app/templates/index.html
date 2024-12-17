@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservoir Level Prediction</title>
+    <style>/* General Reset */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+        
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+        
+        /* Form Panel */
+        .form-panel {
+            width: 25%;
+            background-color: #f0f0f0;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+        
+        .form-panel h1 {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .form-panel label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .form-panel select,
+        .form-panel button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        .form-panel button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .form-panel button:hover {
+            background-color: #45a049;
+        }
+        
+        /* Map Panel */
+        #map {
+            flex: 1;
+            height: 100%;
+        }
+        
+        /* Info Panel */
+        #info-panel {
+            width: 25%;
+            padding: 20px;
+            background-color: #fafafa;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+        
+        #info-panel h2 {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        #info-content {
+            white-space: pre-line;
+            font-size: 1em;
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .form-panel, #info-panel {
+                width: 100%;
+                height: auto;
+            }
+            #map {
+                height: 50vh;
+            }
+        }
+        </style>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB655H2fIB8b-mcPcc_6Phfl6q7d67zjxA&callback=initMap"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            margin-top: 20px;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+        input[type="text"], input[type="submit"] {
+            padding: 10px;
+            margin-bottom: 15px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .result h2 {
+            margin: 0 0 10px;
+        }
+    </style>
+</head>
+<body>
+ 
+
+    <div class="container">
+        <!-- Form Panel -->
+        <div class="form-panel">
+            <h1>Water Reservoir Capacity</h1>
+            
+            <label for="date">Select Year :</label>
+            <select id="date">
+                <option value="">--Select Date--</option>
+            </select>
+
+            <label for="state">Select State:</label>
+            <select id="state" >
+<option value="Karnataka">Karnataka</option>
+                <!-- Add all states of India here -->
+                 
+            </select>
+            <label for="district">Select District:</label>
+            <select id="district" onchange="UpdateReservoir()">
+                <option value="">--Select District--</option>
+<!-- <option value="Bagalkote">Bagalkote</option>
+<option value="Bangalore Rural">Bangalore Rural</option> -->
+<option value="Bagalkote">Bagalkote</option>
+ <option value="Bagalkot">Bagalkot</option>
+<option value="Chikkamagaluru">Chikkamagaluru</option>
+<option value="Uttara Kannada">Uttara Kannada</option>
+<option value="Belagavi">Belagavi</option>
+ <option value="Hassan">Hassan</option>
+<option value="Mysuru">Mysuru</option>
+<option value="Shivamogga">hivamogga</option>
+<option value="Vijayapura">Vijayapura</option>
+<option value="Koppal">Koppal</option>
+<option value="Chitradurga">Chitradurga</option>
+            </select>
+
+            <label for="reservoir">Select Reservoir:</label>
+            <select id="reservoir">
+                <option value="">--Select Reservoir--</option>
+            </select>
+
+            <button onclick="showMap()">Show Map</button>
+        </div>
+
+        <!-- Map Panel -->
+        <div id="map"></div>
+
+        <!-- Info Panel -->
+    
+    </div>
+
+
+    <h1>Reservoir Level and Capacity Prediction</h1>
+
+    <form action="/predict" method="post">
+        <label for="date">Date (YYYY-MM-DD):</label>
+        <input type="text" id="date" name="date" required>
+
+        <label for="state">State:</label>
+        <input type="text" id="state" name="state" required>
+
+        <label for="district">District:</label>
+        <input type="text" id="district" name="district" required>
+
+        <label for="reservoir_name">Reservoir Name:</label>
+        <input type="text" id="reservoir_name" name="reservoir_name" required>
+
+        <input type="submit" value="Predict">
+    </form>
+
+    {% if result %}
+        <div class="result">
+            <h2>Prediction Result</h2>
+            <p><strong>Predicted Level:</strong> {{ result['Predicted Level'] }}</p>
+            <p><strong>Predicted Capacity:</strong> {{ result['Predicted Capacity'] }}</p>
+        </div>
+    {% endif %}
+
+    <script> let map;
+
+    // Dynamically populate the date dropdown
+    const dateSelect = document.getElementById("date");
+    const startDate = new Date(2022, 0, 1); // 1st Jan 2022
+    const endDate = new Date(2030, 11, 31); // 31st Dec 2030
+   
+    let currentDate = startDate;
+    while (currentDate <= endDate) {
+        const option = document.createElement("option");
+        const formattedDate = currentDate.toISOString().split("T")[0]; // Format: YYYY-MM-DD
+        option.value = formattedDate;
+        option.textContent = formattedDate;
+        dateSelect.appendChild(option);
+        currentDate.setDate(currentDate.getDate() + 1); // Increment by 1 day
+    }
+   
+   const districtReservoirMap = {
+       "Bagalkote": ["Almatti"],
+       "Bagalkot": [" Almatti Reservoir"],
+       "Chikkamagaluru": ["Bhadra reservoir"],
+       "Uttara Kannada": ["Gerusoppa Reservoir","Supa Reservoir"],
+       "Belagavi": ["Hidkal Reservoir","Malaprabha Reservoir"],
+       "Hassan": ["Hemavathi"],
+       "Mysuru": ["Kabini Reservoir"],
+       "Shivamogga": ["Linganamakki Reservoir","Mani Dam"],
+       "Vijayapura": ["Narayanapura Reservoir"],
+       "Koppal": ["Tungabhadra"],
+       "Chitradurga": ["Vani Vilasa Sagara"]
+   };
+   
+   const reservoirCoordinates = {
+       "Almatti": [16.3317, 75.8743],
+       "Bhadra reservoir": [13.7378, 75.6319],
+       "Gerusoppa Reservoir": [14.2781, 74.6711],
+       "Supa Reservoir": [15.2666, 74.4116],
+       "Hidkal Reservoir": [16.2250, 74.6502],
+       "Malaprabha Reservoir": [15.9402, 74.5085],
+       "Kodasalli": [15.2202, 74.4706],
+       "Hidkal": [16.2250, 74.6502],
+       "Hemavathi": [12.8163, 76.0642],
+       "Kabini Reservoir": [11.9977, 76.3266],
+       "Linganamakki Reservoir": [14.1874, 74.8106],
+       "Mani Dam": [13.9866, 74.9893],
+       "Narayanapura Reservoir": [16.1834, 76.2832],
+       "Tungabhadra": [15.2597, 76.3598],
+       "Vani Vilasa Sagara": [14.0597, 76.4292]
+   };
+   
+   
+   function UpdateReservoir() {
+       const districtSelect = document.getElementById("district");
+       const reservoirSelect = document.getElementById("reservoir");
+   
+       // Get the selected district
+       const selectedDistrict = districtSelect.value;
+   
+       // Clear the existing options in the reservoir select
+       reservoirSelect.innerHTML = '<option value="">--Select Reservoir--</option>';
+   
+       // Populate the reservoir dropdown if the district is valid
+       if (districtReservoirMap[selectedDistrict]) {
+           const reservoirs = districtReservoirMap[selectedDistrict];
+           reservoirs.forEach(reservoir => {
+               const option = document.createElement("option");
+               option.value = reservoir;
+               option.textContent = reservoir;
+               reservoirSelect.appendChild(option);
+           });
+       }
+   }
+   
+   function showMap() {
+       const reservoirSelect = document.getElementById("reservoir");
+       const selectedReservoir = reservoirSelect.value;
+   
+       if (selectedReservoir && reservoirCoordinates[selectedReservoir]) {
+           const [lat, lng] = reservoirCoordinates[selectedReservoir];
+   
+           const map = new google.maps.Map(document.getElementById("map"), {
+               center: { lat, lng },
+               zoom: 12
+           });
+   
+           new google.maps.Marker({
+               position: { lat, lng },
+               map,
+               title: selectedReservoir
+           });
+       } else {
+           alert("Please select a valid reservoir.");
+       }
+   }
+      
+   </script>
+</body>
+</html>
